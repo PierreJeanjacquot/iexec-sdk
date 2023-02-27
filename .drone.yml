@@ -96,7 +96,8 @@ services:
 
   token-chain-1s:
     image: iexechub/poco-chaintest:5.3.2-token
-    command: '--miner.blockTime 1'
+    commands: 
+      - node /app/dist/node/cli.js --chain.networkId 65535 --chain.chainId 65535 --chain.hardfork london --database.dbPath /ganachedb --miner.blockTime 1
     pull: true
 
   token-chain-openethereum:
@@ -106,6 +107,11 @@ services:
   token-sms-scone:
     image: iexechub/iexec-sms:7.1.0
     pull: true
+    commands:
+      - sleep 10
+      - java -jar /app/iexec-sms.jar
+    expose:
+      - 13300
     environment:
       - TZ=Europe/Paris
       - IEXEC_SMS_BLOCKCHAIN_NODE_ADDRESS=http://token-chain-openethereum:8545
@@ -121,14 +127,17 @@ services:
       - IEXEC_SMS_DISPLAY_DEBUG_SESSION=true
       - IEXEC_SCONE_CAS_HOST=foo
       - IEXEC_SMS_IMAGE_LAS_IMAGE=foo
-    expose:
-      - 13300
     depends_on:
       - token-chain-openethereum
 
   token-sms-gramine:
     image: iexechub/iexec-sms:7.1.0
     pull: true
+    commands:
+      - sleep 10
+      - java -jar /app/iexec-sms.jar
+    expose:
+      - 13300
     environment:
       - TZ=Europe/Paris
       - IEXEC_SMS_BLOCKCHAIN_NODE_ADDRESS=http://token-chain-openethereum:8545
@@ -144,14 +153,17 @@ services:
       - IEXEC_SMS_DISPLAY_DEBUG_SESSION=true
       - IEXEC_SCONE_CAS_HOST=foo
       - IEXEC_SMS_IMAGE_LAS_IMAGE=foo
-    expose:
-      - 13300
     depends_on:
       - token-chain-openethereum
 
   token-result-proxy:
     image: iexechub/iexec-result-proxy:7.1.0
     pull: true
+    commands:
+      - sleep 10
+      - java -Djava.security.egd=file:/dev/./urandom -jar /iexec-result-proxy.jar
+    expose:
+      - 13200
     environment:
       - IEXEC_PRIVATE_CHAIN_ADDRESS=http://token-chain-openethereum:8545
       - IEXEC_PUBLIC_CHAIN_ADDRESS=http://token-chain-openethereum:8545
@@ -159,8 +171,6 @@ services:
       - MONGO_HOST=token-result-proxy-mongo
       - MONGO_PORT=13202
       - IEXEC_IPFS_HOST=ipfs
-    expose:
-      - 13200
     depends_on:
       - token-chain-openethereum
       - token-result-proxy-mongo
@@ -170,7 +180,8 @@ services:
     pull: true
     image: library/mongo:4.2
     entrypoint: '/bin/bash'
-    command: -c "mongod --bind_ip_all --port 13202"
+    commands: 
+      - mongod --bind_ip_all --port 13202
     expose:
       - 13202
 
@@ -183,7 +194,8 @@ services:
 
   gateway-redis:
     image: redis:alpine
-    command: redis-server --appendonly yes
+    commands:
+      - redis-server --appendonly yes
 
   token-watcher:
     image: iexechub/iexec-market-watcher:5
