@@ -127,8 +127,6 @@ services:
       - IEXEC_SMS_DISPLAY_DEBUG_SESSION=true
       - IEXEC_SCONE_CAS_HOST=foo
       - IEXEC_SMS_IMAGE_LAS_IMAGE=foo
-    depends_on:
-      - token-chain-openethereum
 
   token-sms-gramine:
     image: iexechub/iexec-sms:7.1.0
@@ -153,8 +151,6 @@ services:
       - IEXEC_SMS_DISPLAY_DEBUG_SESSION=true
       - IEXEC_SCONE_CAS_HOST=foo
       - IEXEC_SMS_IMAGE_LAS_IMAGE=foo
-    depends_on:
-      - token-chain-openethereum
 
   token-result-proxy:
     image: iexechub/iexec-result-proxy:7.1.0
@@ -171,10 +167,6 @@ services:
       - MONGO_HOST=token-result-proxy-mongo
       - MONGO_PORT=13202
       - IEXEC_IPFS_HOST=ipfs
-    depends_on:
-      - token-chain-openethereum
-      - token-result-proxy-mongo
-      - ipfs
 
   token-result-proxy-mongo:
     pull: true
