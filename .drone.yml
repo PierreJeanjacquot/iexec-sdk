@@ -110,8 +110,6 @@ services:
     commands:
       - sleep 10
       - java -jar /app/iexec-sms.jar
-    expose:
-      - 13300
     environment:
       - TZ=Europe/Paris
       - IEXEC_SMS_BLOCKCHAIN_NODE_ADDRESS=http://token-chain-openethereum:8545
@@ -134,8 +132,6 @@ services:
     commands:
       - sleep 10
       - java -jar /app/iexec-sms.jar
-    expose:
-      - 13300
     environment:
       - TZ=Europe/Paris
       - IEXEC_SMS_BLOCKCHAIN_NODE_ADDRESS=http://token-chain-openethereum:8545
@@ -158,14 +154,12 @@ services:
     commands:
       - sleep 10
       - java -Djava.security.egd=file:/dev/./urandom -jar /iexec-result-proxy.jar
-    expose:
-      - 13200
     environment:
       - IEXEC_PRIVATE_CHAIN_ADDRESS=http://token-chain-openethereum:8545
       - IEXEC_PUBLIC_CHAIN_ADDRESS=http://token-chain-openethereum:8545
       - IEXEC_HUB_ADDRESS=0xC129e7917b7c7DeDfAa5Fff1FB18d5D7050fE8ca
       - MONGO_HOST=token-result-proxy-mongo
-      - MONGO_PORT=13202
+      - MONGO_PORT=27017
       - IEXEC_IPFS_HOST=ipfs
 
   token-result-proxy-mongo:
@@ -173,9 +167,7 @@ services:
     image: library/mongo:4.2
     entrypoint: '/bin/bash'
     commands: 
-      - mongod --bind_ip_all --port 13202
-    expose:
-      - 13202
+      - mongod --bind_ip_all
 
   ipfs:
     image: ipfs/go-ipfs:v0.9.1
